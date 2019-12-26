@@ -1,0 +1,166 @@
+\documentclass[addpoints]{exam}
+
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows, arrows.meta}
+
+% Header and footer.
+\pagestyle{headandfoot}
+\runningheadrule
+\runningfootrule
+\runningheader{CS 224}{Legend of SeePlusia Reloaded}{Fall 2019}
+\runningfooter{}{Page \thepage\ of \numpages}{}
+\firstpageheader{}{}{}
+
+\qformat{{\large\bf \thequestiontitle}\hfill}
+\boxedpoints
+
+\title{Homework 2: Legend of SeePlusia Reloaded}
+\author{CS 224 Object Oriented Programming and Design Methodologies\\Habib University\\Fall 2019}
+\date{Due: 18h on Monday, 30 September}
+
+\begin{document}
+\maketitle
+
+The object oriented approach advocates encapsulation of related information in a class. A program proceeds by creating instances of the classes and having the instances interact with each other.
+
+Object oriented {\it design} refers to deciding which information to group together and how. Alternately, it refers to deciding the classes for your program and their attributes (characteristics) and methods (behavior). This is not so much a science as it is an art---there are many possible designs for a given problem and all of them are {\it correct}.
+
+In this assignment, we will redesign Legend of SeePlusia in an object oriented manner. We will encapsulate all information related to game logic in a {\tt Game} class. Information related to a location will be represented in a {\tt Location} class. We will model the information related to traveling from one location to another in a {\tt Road} class. We will implement a {\tt Map} class to model a map consisting of {\tt Location} and {\tt Road} objects. Finally, we will create a {\tt Player} class to hold information and behavior relevant to the player.
+
+\begin{questions}
+  
+\titledquestion{Setting up the Map}
+
+Declarations of the classes {\tt Location}, {\tt Road}, and {\tt Map} are attached. Write a corresponding implementation file for each class.
+
+Use the above implementations to implement {\tt Map::set\_map()} so as to create the map of SeePlusia given on Page \pageref{sec:map}. This is the same map as in the previous assignment.
+
+One way roads, e.g. from {\it Swamps of Despair} to {\it Sands of Quick}, are modeled as follows. The corresponding {\tt Road} object contains pointers to both {\tt Location} objects. The {\tt Location} with the missing direction has the corresponding pointer set to {\tt NULL}. For example, the {\tt south} pointer of the {\tt Location} object corresponding to {\it Sands of Quick} stores {\tt NULL}.
+
+\titledquestion{Game Logic}
+
+Game logic is encapsulated in the {\tt Game} class. Declarations of the {\tt Player} and {\tt Game} classes are in the attached files. Implement them with the same logic as in the previous homework.
+
+Once everything is set up, the {\tt main} program is simply as follows.
+\begin{lstlisting}[frame=single,language=c++]
+int main(int argc, char **argv) {
+  Game game;
+  game.run();
+  return 0;
+}
+\end{lstlisting}
+Put this {\tt main} program in a file {\tt main.cpp}.
+
+\titledquestion{Representing the Map}
+
+One benefit of encapsulation is that different components of the game are now independent of each other. For example, our game can now run on any valid map. A text representation of the map of SeePlusia is in the attached file {\tt seeplusia.txt}. It has the following format.
+\begin{itemize}
+\item The first line contains, $n$, the number of locations in the map.
+\item Following the first line are 2 lines each for every location. The first of the 2 lines contains the id of the location and the second contains its name. The first location is the start location.
+\item Next are $10n$ lines---10 lines for each of the $n$ locations. These 10 lines list the location's id, its neighboring locations and the number of days required to travel to each, and any special characteristic of the location. A blank value for a field indicates that the field does not apply to this location.
+\end{itemize}
+Implement the method, {\tt Map::read\_map()}, that takes a parameter indicating the name of a map file, i.e. the file specifies a map in the above format. The method, {\tt Map::read\_map()}, should read the map from the file and update the {\tt Map} object accordingly. Test your method on the file, {\tt seeplusia.txt}.
+
+\titledquestion{Level Maker}
+
+Write a map file in the format described above to represent the map on Page \pageref{sec:map2}. Name the file {\tt mymap.txt} and test your game by loading and playing this map.
+
+\titledquestion{Map of SeePlusia}
+\label{sec:map}
+
+\begin{tikzpicture}[tnode/.style={circle,draw,thick,minimum size=50pt,align=center},
+  node distance = 50pt,
+  legend/.style={line width=1pt},
+  sarrow/.style={-latex,thick}, darrow/.style={latex'-latex',thick},
+  ]
+  \centering
+  \scriptsize
+  % Locations.
+  \node[tnode, draw=cyan](forest) {Enchanted\\Forest};
+  \node[tnode, right=of forest] (swamps) {Swamps\\of\\Despair};
+  \node[tnode, left=of forest] (bridge) {Bridge\\of\\Death};
+  \node[tnode, left=of bridge, draw=teal] (castle) {Wizard's\\Castle};
+  \node[tnode, above=of forest, draw=magenta] (marsh) {Marsh\\of the\\Undead};
+  \node[tnode, right=of marsh, fill=brown] (sands) {Sands\\of\\Quick};
+  \node[tnode, below=of forest] (cove) {Vampire\\Cove};
+  \node[tnode, right=of cove, draw=magenta] (fall) {Elven\\Waterfall};
+  \node[tnode, below=of cove, draw=magenta] (hill) {Werewolf\\Hill};
+  % Arrows.
+  \draw[sarrow] (marsh) -- node[above,midway]{1 day}(sands);
+  \draw[sarrow] (swamps) -- node[right,midway]{2 days}(sands);
+  \draw[sarrow] (bridge) -- node[above,midway]{5 days}(castle);
+  \draw[darrow] (marsh) -- node[right,midway]{1 day}(forest);
+  \draw[darrow] (swamps) -- node[above,midway]{2 days}(forest);
+  \draw[darrow] (cove) -- node[right,midway]{3 days}(forest);
+  \draw[darrow] (swamps) -- node[right,midway]{1 day}(fall);
+  \draw[darrow] (cove) -- node[right,midway]{3 days}(hill);
+  \draw[darrow] (bridge) -- node[above,midway]{1 day}(forest);
+  % Compass.
+  \node[inner sep=0pt,below=of castle] (compass) {\includegraphics[scale=.5]{nsew}};
+  % Legend.
+  \draw[cyan,legend] (-8,4) -- (-7,4);
+  \node[anchor=west] at (-6.75,4) {Start Adventure};
+  \draw[magenta,legend] (-8,3.5) -- (-7,3.5);
+  \node[anchor=west] at (-6.75,3.5) {Location of Objectos Crystal};
+  \draw[brown,legend] (-8,3) -- (-7,3);
+  \node[anchor=west] at (-6.75,3) {Slow Death};
+  \draw[teal,legend] (-8,2.5) -- (-7,2.5);
+  \node[anchor=west] at (-6.75,2.5) {Rescue Prince};
+\end{tikzpicture}
+
+\newpage
+\titledquestion{Custom Map}
+\label{sec:map2}
+
+\begin{center}
+\begin{tikzpicture}[tnode/.style={circle,draw,thick,minimum size=50pt,align=center},
+  node distance = 50pt,
+  legend/.style={line width=1pt},
+  sarrow/.style={-latex,thick}, darrow/.style={latex'-latex',thick},
+  ]
+  \centering
+  \scriptsize
+  % Locations.
+  \node[tnode, draw=cyan] (castle) {Wizard's\\Castle};
+  \node[tnode, below=of castle] (fall) {Elven\\Waterfall};
+  \node[tnode, below=of fall, draw=teal] (hill) {Werewolf\\Hill};
+  \node[tnode, above=of castle] (forest) {Enchanted\\Forest};
+  \node[tnode, right=of forest, draw=magenta] (marsh) {Marsh\\of the\\Undead};
+  \node[tnode, right=of marsh] (cove) {Vampire\\Cove};
+  \node[tnode, right=of castle, fill=brown] (swamps) {Swamps\\of\\Despair};
+  \node[tnode, right=of swamps, draw=magenta] (bridge) {Bridge\\of\\Death};
+  \node[tnode, right=of fall, draw=magenta] (sands) {Sands\\of\\Quick};
+  % % Arrows.
+  \draw[darrow] (forest) -- node[above,midway]{2 days}(marsh);
+  \draw[darrow] (marsh) -- node[above,midway]{3 days}(cove);
+  \draw[darrow] (forest) -- node[left,midway]{1 day}(castle);
+  \draw[sarrow] (marsh) -- node[left,midway]{1 day}(swamps);
+  \draw[darrow] (cove) -- node[left,midway]{2 days}(bridge);
+  \draw[sarrow] (castle) -- node[above,midway]{2 days}(swamps);
+  \draw[sarrow] (bridge) -- node[above,midway]{2 days}(swamps);
+  \draw[darrow] (castle) -- node[left,midway]{1 day}(fall);
+  \draw[sarrow] (sands) -- node[left,midway]{2 days}(swamps);
+  \draw[darrow] (sands) -- node[above,midway]{2 days}(fall);
+  \draw[sarrow] (fall) -- node[left,midway]{2 days}(hill);
+  % Compass.
+  \node[inner sep=0pt,right=of sands] (compass) {\includegraphics[scale=.5]{nsew}};
+  % Legend.
+  \draw[cyan,legend] (3.5,-6.5) -- (4.5,-6.5);
+  \node[anchor=west] at (4.75,-6.5) {Start Adventure};
+  \draw[magenta,legend] (3.5, -7) -- (4.5, -7);
+  \node[anchor=west] at (4.75,-7) {Location of Objectos Crystal};
+  \draw[brown,legend] (3.5,-7.5) -- (4.5,-7.5);
+  \node[anchor=west] at (4.75,-7.5) {Slow Death};
+  \draw[teal,legend] (3.5,-8) -- (4.5,-8);
+  \node[anchor=west] at (4.75,-8) {Rescue Prince};
+\end{tikzpicture}
+\end{center}
+
+\titledquestion{Credits}
+
+The original map and assignment are courtesy of \href{https://twitter.com/nav_ejaz}{Naveed Ejaz}.
+\end{questions}
+\end{document}

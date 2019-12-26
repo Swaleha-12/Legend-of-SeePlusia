@@ -1,0 +1,14 @@
+,Weight,F - Unaccpetable,C - Acceptable,B - Good,A - Excellent
+,,"[0, 60)","[60, 70)","[70, 85)","[85, 100]"
+Correctness,,,,,
+Compile and Run,10,The submitted files do not compile.,,The files compile but crash when running.,The files compile and run smoothly.
+Game Logic,15,"All of the following 5 are buggy or missing: 1. display of game state, 2. additional messages, 3. navigation, 4. state update, 5. game over conditions.",Up to 2 of the 5 features work consistently and smoothly. The others seem to be buggy.,Up to 4 of the 5 features work consistently and smoothly.,All 5 featrues run smoothly and consistently.
+Mymap,5,The file does not exist.,,The file exists but seems buggy.,The file exists and seems fine.
+Map Reading,20,The code is unable to read from file. It crashes.,The code reads from file but the map seems to be all wrong.,The code reads from file but the map has a few bugs.,The map appears to be correct and the game runs just as well on it as it did on the hardcoded map.
+Code,,,,,
+Reuse,10,The code does not utilize the methods made avaialbe by all the classes.,The code utilizes class methods in some places.,The code utilizes class methods in most places.,Every method from each class is used consistently and meaningfully.
+Deallocation of Memory,10,Dynamically allocated memory is not deallocated.,,Memory is deallocated in Map::~Map() but the code is buggy.,Dynamically allocated memory is correctly deallocated in Map::~Map().
+Quality,,,,,
+Modularity,10,The code contains one long main function.,,The code is occasionally divided into functions. Some functions are long.,"The code is modular - it consists of short, atomic functions. New functions are introduced and called to ensure modularity."
+Documentation,10,There are no comments.,"There is an excess of comments, e.g. a comment per line, in at least some portions of the code.",Only some portions are well commented.,The code is not overly commented. Logical blocks of code are consistenly preceded by helpful comments which explain in terms of game logic (check valid move) rather than program logic (is input string the right value?).
+Style and Readability,10,The code is a random jumble of characters. I hope I never have to see anything like this ever again in my life.,,Only some portions of the code exhibit good style. Some lines are longer than 80 characters. Comments have a haphazard style.,"All variables have meaningful names. There is a consistent, pleasing style regarding whitespace, naming, braces, and comments. All lines are within 80 characters."
