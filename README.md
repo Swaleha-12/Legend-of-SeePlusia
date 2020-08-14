@@ -15,14 +15,7 @@ For this homework, you should know how to perform the following.
 
 ## The Problem Set
 
-The problems are in `main.tex` which is to be compiled using a LaTeX compiler.
+The problems are in `main.tex` which is to be compiled using a LaTeX compiler. The PDF version is also present.
 
 
-## Time Requirement
-
-Based on input from student teams that last attempted this homework, the time requirement for this assignment is as follows.
-- Minimum time required : 7 hours
-- Maximum time required : 35 hours
-- Average time required : 19.06 hours
-- Median time required : 17.5 hours
 
